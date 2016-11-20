@@ -1,0 +1,5 @@
+{
+  "hosting": {
+    "public": "target/web/stage"
+  }
+}
