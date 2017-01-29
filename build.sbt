@@ -2,8 +2,12 @@ organization := "lt.dvim"
 name := "pocaboard"
 
 libraryDependencies ++= Seq(
-  "com.github.japgolly.scalajs-react" %%% "core" % "0.11.3",
-  "com.github.japgolly.scalajs-react" %%% "extra" % "0.11.3"
+  "com.github.japgolly.scalajs-react" %%% "core"           % "0.11.3",
+  "com.github.japgolly.scalajs-react" %%% "extra"          % "0.11.3",
+  "com.github.japgolly.scalajs-react" %%% "ext-monocle"    % "0.11.3",
+  "fr.hmil"                           %%% "roshttp"        % "2.0.1",
+  "com.lihaoyi"                       %%% "upickle"        % "0.4.4",
+  "com.github.julien-truffaut"        %%%  "monocle-macro" % "1.4.0"
 )
 
 jsDependencies ++= Seq(
@@ -25,11 +29,11 @@ jsDependencies ++= Seq(
 
 WebKeys.stage := {
   val directory = WebKeys.stage.value
-  val deps      = (packageJSDependencies in Compile).value
-  val js        = (fullOptJS in Compile).value.data
-  IO.copyFile(js, directory / js.getName)
-  IO.copyFile(deps, directory / deps.getName)
+  Seq((packageJSDependencies in Compile).value, (fastOptJS in Compile).value.data).foreach { js =>
+    IO.copyFile(js, directory / js.getName)
+  }
   directory
 }
 
 enablePlugins(SbtWeb, ScalaJSPlugin)
+moduleName in fastOptJS in Compile := name.value
